@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>Taller mecánico</h1>
+  <p>
+    Gestión de ingresos, presupuestos en <strong>CLP</strong> y seguimiento del estado de reparación.
+    Los clientes consultan sus vehículos en línea; el personal del taller administra el flujo completo.
+  </p>
+  {% if not user.is_authenticated %}
+    <a href="{% url 'register' %}" class="btn btn-primary">Registrarse</a>
+    <a href="{% url 'login' %}" class="btn btn-ghost">Iniciar sesión</a>
+  {% else %}
+    <a href="{% url 'vehiculos:mis_vehiculos' %}" class="btn btn-primary">Ver mis vehículos</a>
+    {% if user.is_staff %}
+      <a href="{% url 'vehiculos:panel_taller' %}" class="btn btn-ghost">Panel del taller</a>
+    {% endif %}
+  {% endif %}
+</div>
+<div class="grid-stats">
+  <div class="stat-box">
+    <span>Clientes</span>
+    <strong>Portal web</strong>
+    <p class="muted" style="margin:0.5rem 0 0;font-size:0.85rem;">Registro, login y vista de estado.</p>
+  </div>
+  <div class="stat-box">
+    <span>Administración</span>
+    <strong>CRUD vehículos</strong>
+    <p class="muted" style="margin:0.5rem 0 0;font-size:0.85rem;">Asignación de propietario y estados.</p>
+  </div>
+  <div class="stat-box">
+    <span>Stack</span>
+    <strong>Django ORM</strong>
+    <p class="muted" style="margin:0.5rem 0 0;font-size:0.85rem;">Relaciones, migraciones y consultas.</p>
+  </div>
+</div>
+{% endblock %}

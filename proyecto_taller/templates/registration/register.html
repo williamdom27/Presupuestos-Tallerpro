@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Registro · Taller{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Crear cuenta</h1>
+  <p>Regístrate como cliente para consultar tus vehículos asignados por el taller.</p>
+</div>
+<div class="card" style="max-width:28rem;margin:0 auto;">
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% if field.field.widget.input_type == 'password' %}
+          <div class="password-input-row">
+            {{ field }}
+            <button
+              type="button"
+              class="btn-toggle-password"
+              data-password-toggle
+              aria-label="Mostrar contraseña"
+              aria-pressed="false"
+            >
+              <span class="toggle-label-show">Mostrar</span>
+              <span class="toggle-label-hide">Ocultar</span>
+            </button>
+          </div>
+        {% else %}
+          {{ field }}
+        {% endif %}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+    <a href="{% url 'login' %}" class="btn btn-ghost" style="margin-left:0.5rem;">Ya tengo cuenta</a>
+  </form>
+</div>
+{% endblock %}

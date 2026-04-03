@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}Editar{% else %}Nuevo{% endif %} vehículo{% endblock %}
+{% block content %}
+<h1>{% if object %}Editar vehículo{% else %}Registrar vehículo{% endif %}</h1>
+<p class="muted">Marca, modelo, patente, propietario (usuario), presupuesto en CLP, fecha de ingreso y estado de reparación.</p>
+<div class="card" style="max-width:36rem;">
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="muted" style="margin:0.25rem 0 0;font-size:0.8rem;">{{ field.help_text }}</p>{% endif %}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'vehiculos:admin_lista' %}" class="btn btn-ghost">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

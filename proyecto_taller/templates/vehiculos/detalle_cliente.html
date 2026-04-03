@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load formato_clp %}
+{% block title %}{{ vehiculo.patente }} · Estado{% endblock %}
+{% block content %}
+<p class="muted"><a href="{% url 'vehiculos:mis_vehiculos' %}">← Volver a mis vehículos</a></p>
+<h1>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h1>
+<p class="muted">Patente <strong>{{ vehiculo.patente }}</strong></p>
+<div class="card">
+  <h2>Estado de reparación</h2>
+  <p style="font-size:1.25rem;margin:0;">
+    <span class="badge" style="font-size:1rem;">{{ vehiculo.get_estado_reparacion_display }}</span>
+  </p>
+  <p class="muted" style="margin-top:1rem;">
+    Fecha de ingreso al taller: <strong>{{ vehiculo.fecha_ingreso|date:"l d F Y" }}</strong>
+  </p>
+  <p class="muted">
+    Presupuesto estimado de reparación: <strong>{{ vehiculo.presupuesto_reparacion|clp }}</strong>
+  </p>
+</div>
+{% endblock %}

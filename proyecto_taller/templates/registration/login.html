@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión · Taller{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Iniciar sesión</h1>
+  <p>Accede para ver el estado de tus vehículos en el taller.</p>
+</div>
+<div class="card" style="max-width:24rem;margin:0 auto;">
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+    {% endif %}
+    <div class="form-row">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div class="form-row">
+      {{ form.password.label_tag }}
+      <div class="password-input-row">
+        {{ form.password }}
+        <button
+          type="button"
+          class="btn-toggle-password"
+          data-password-toggle
+          aria-label="Mostrar contraseña"
+          aria-pressed="false"
+        >
+          <span class="toggle-label-show">Mostrar</span>
+          <span class="toggle-label-hide">Ocultar</span>
+        </button>
+      </div>
+      {{ form.password.errors }}
+    </div>
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <button type="submit" class="btn btn-primary">Entrar</button>
+    <a href="{% url 'register' %}" class="btn btn-ghost" style="margin-left:0.5rem;">Crear cuenta</a>
+  </form>
+</div>
+{% endblock %}

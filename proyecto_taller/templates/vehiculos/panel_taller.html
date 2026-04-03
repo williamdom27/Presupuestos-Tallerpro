@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load formato_clp %}
+{% block title %}Panel taller{% endblock %}
+{% block content %}
+<h1>Panel del taller</h1>
+<p class="muted">Resumen calculado con agregaciones ORM (<code>annotate</code> / <code>aggregate</code>).</p>
+<div class="grid-stats">
+  <div class="stat-box">
+    <span>En proceso (taller)</span>
+    <strong>{{ stats.vehiculos_activos_en_taller }}</strong>
+  </div>
+  <div class="stat-box">
+    <span>Suma presupuestos (todos)</span>
+    <strong>{{ stats.total_presupuesto_clp|clp }}</strong>
+  </div>
+</div>
+<div class="card">
+  <h2>Vehículos por estado</h2>
+  <table>
+    <thead>
+      <tr><th>Estado</th><th>Cantidad</th></tr>
+    </thead>
+    <tbody>
+      {% for row in stats.por_estado %}
+      <tr>
+        <td>{{ row.etiqueta }}</td>
+        <td>{{ row.total }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="2" class="muted">Sin datos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="actions">
+  <a href="{% url 'vehiculos:admin_lista' %}" class="btn btn-primary">Ir a gestión CRUD</a>
+  <a href="{% url 'vehiculos:admin_crear' %}" class="btn btn-ghost">Nuevo vehículo</a>
+</p>
+<div class="card">
+  <h2>Últimos ingresos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Patente</th>
+        <th>Vehículo</th>
+        <th>Propietario</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in recientes %}
+      <tr>
+        <td>{{ v.patente }}</td>
+        <td>{{ v.marca }} {{ v.modelo }}</td>
+        <td>{% if v.propietario %}{{ v.propietario.username }}{% else %}<span class="muted">Sin asignar</span>{% endif %}</td>
+        <td>{{ v.get_estado_reparacion_display }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

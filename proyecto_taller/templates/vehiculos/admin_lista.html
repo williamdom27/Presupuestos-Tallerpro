@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load formato_clp %}
+{% block title %}Gestionar vehículos{% endblock %}
+{% block content %}
+<h1>Vehículos en el sistema</h1>
+<p class="actions">
+  <a href="{% url 'vehiculos:admin_crear' %}" class="btn btn-primary">Crear vehículo</a>
+  <a href="{% url 'vehiculos:panel_taller' %}" class="btn btn-ghost">Panel</a>
+</p>
+<form method="get" class="card" style="padding:1rem 1.25rem;">
+  <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;">
+    <div class="form-row" style="margin:0;">
+      <label for="q">Buscar</label>
+      <input type="text" name="q" id="q" value="{{ filtro_q }}" placeholder="Patente, marca, modelo, usuario">
+    </div>
+    <div class="form-row" style="margin:0;">
+      <label for="estado">Estado</label>
+      <select name="estado" id="estado">
+        <option value="">Todos</option>
+        {% for val, label in estados %}
+        <option value="{{ val }}" {% if filtro_estado == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </div>
+</form>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Patente</th>
+        <th>Vehículo</th>
+        <th>Propietario</th>
+        <th>Presupuesto</th>
+        <th>Ingreso</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vehiculos %}
+      <tr>
+        <td><strong>{{ v.patente }}</strong></td>
+        <td>{{ v.marca }} {{ v.modelo }}</td>
+        <td>{% if v.propietario %}{{ v.propietario.username }}{% else %}<span class="muted">—</span>{% endif %}</td>
+        <td>{{ v.presupuesto_reparacion|clp }}</td>
+        <td>{{ v.fecha_ingreso|date:"d/m/Y" }}</td>
+        <td><span class="badge">{{ v.get_estado_reparacion_display }}</span></td>
+        <td class="actions">
+          <a href="{% url 'vehiculos:admin_editar' v.pk %}">Editar</a>
+          ·
+          <a href="{% url 'vehiculos:admin_eliminar' v.pk %}">Eliminar</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="muted">No hay vehículos con esos criterios.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if is_paginated %}
+<p class="muted">
+  Página {{ page_obj.number }} de {{ paginator.num_pages }}
+  {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}&q={{ filtro_q }}&estado={{ filtro_estado }}">Anterior</a>{% endif %}
+  {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}&q={{ filtro_q }}&estado={{ filtro_estado }}">Siguiente</a>{% endif %}
+</p>
+{% endif %}
+{% endblock %}

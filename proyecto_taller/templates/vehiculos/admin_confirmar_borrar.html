@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Eliminar vehículo{% endblock %}
+{% block content %}
+<h1>Eliminar vehículo</h1>
+<div class="card">
+  <p>¿Confirmas eliminar <strong>{{ object.marca }} {{ object.modelo }}</strong> ({{ object.patente }})?</p>
+  <p class="muted">Esta acción no se puede deshacer desde la aplicación web.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'vehiculos:admin_lista' %}" class="btn btn-ghost">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

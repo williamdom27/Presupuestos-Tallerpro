@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load formato_clp %}
+{% block title %}Mis vehículos{% endblock %}
+{% block content %}
+<h1>Mis vehículos</h1>
+<p class="muted">Solo ves los vehículos que el taller ha asociado a tu usuario.</p>
+{% if vehiculos %}
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Patente</th>
+          <th>Vehículo</th>
+          <th>Ingreso</th>
+          <th>Presupuesto</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in vehiculos %}
+        <tr>
+          <td><strong>{{ v.patente }}</strong></td>
+          <td>{{ v.marca }} {{ v.modelo }}</td>
+          <td>{{ v.fecha_ingreso|date:"d/m/Y" }}</td>
+          <td>{{ v.presupuesto_reparacion|clp }}</td>
+          <td><span class="badge">{{ v.get_estado_reparacion_display }}</span></td>
+          <td><a href="{% url 'vehiculos:detalle' v.pk %}">Detalle</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="card">
+    <p class="muted">Aún no tienes vehículos asignados. Cuando el taller registre tu auto y te asigne como propietario, aparecerá aquí.</p>
+  </div>
+{% endif %}
+{% endblock %}
